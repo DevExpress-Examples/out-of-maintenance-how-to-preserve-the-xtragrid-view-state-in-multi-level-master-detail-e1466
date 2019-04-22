@@ -237,19 +237,21 @@ Namespace DevExpress.XtraGrid.Helpers
 				view.TopRowIndex = view.GetVisibleIndex(view.FocusedRowHandle) - visibleRowIndex
 			End Sub
 
-			Public Sub LoadSelectionViewInfo(ByVal view As GridView)
-				view.BeginSelection()
-				Try
-					view.ClearSelection()
-					For i As Integer = 0 To SaveSelList.Count - 1
-						SelectRowByRowInfo(view, CType(SaveSelList(i), RowInfo), i = SaveSelList.Count - 1)
-					Next i
-				Finally
-					view.EndSelection()
-				End Try
-			End Sub
+            Public Sub LoadSelectionViewInfo(ByVal view As GridView)
+                view.DataController.EnsureFindRowByValueCache(view.DataController.Columns(descriptor.keyFieldName), view.RowCount)
+                view.BeginSelection()
+                Try
+                    view.ClearSelection()
+                    For i As Integer = 0 To SaveSelList.Count - 1
+                        SelectRowByRowInfo(view, CType(SaveSelList(i), RowInfo), i = SaveSelList.Count - 1)
+                    Next i
+                Finally
+                    view.EndSelection()
+                    view.DataController.DestroyFindRowByValueCache()
+                End Try
+            End Sub
 
-			Public Sub LoadExpansionViewInfo(ByVal view As GridView)
+            Public Sub LoadExpansionViewInfo(ByVal view As GridView)
 				If view.GroupedColumns.Count = 0 Then
 					Return
 				End If

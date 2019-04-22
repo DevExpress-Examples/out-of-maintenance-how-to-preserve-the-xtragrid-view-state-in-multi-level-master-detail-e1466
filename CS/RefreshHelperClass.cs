@@ -217,6 +217,7 @@ namespace DevExpress.XtraGrid.Helpers {
             }
 
             public void LoadSelectionViewInfo(GridView view) {
+                view.DataController.EnsureFindRowByValueCache(view.DataController.Columns[descriptor.keyFieldName], view.RowCount);
                 view.BeginSelection();
                 try {
                     view.ClearSelection();
@@ -225,6 +226,7 @@ namespace DevExpress.XtraGrid.Helpers {
                 }
                 finally {
                     view.EndSelection();
+                    view.DataController.DestroyFindRowByValueCache();
                 }
             }
 
