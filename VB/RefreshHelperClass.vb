@@ -1,4 +1,5 @@
-﻿Imports System
+Imports Microsoft.VisualBasic
+Imports System
 Imports System.Collections
 Imports DevExpress.XtraGrid
 Imports DevExpress.Utils
@@ -28,17 +29,12 @@ Namespace DevExpress.XtraGrid.Helpers
 			Private gridState As GridControlState
 			Private parent As ViewState
 			Private descriptor As ViewDescriptor
-'INSTANT VB NOTE: The field saveExpList was renamed since Visual Basic does not allow fields to have the same name as other class members:
 			Private saveExpList_Renamed As ArrayList
-'INSTANT VB NOTE: The field saveSelList was renamed since Visual Basic does not allow fields to have the same name as other class members:
 			Private saveSelList_Renamed As ArrayList
-'INSTANT VB NOTE: The field saveMasterRowsList was renamed since Visual Basic does not allow fields to have the same name as other class members:
 			Private saveMasterRowsList_Renamed As ArrayList
 			Private visibleRowIndex As Integer = -1
-'INSTANT VB NOTE: The field detailViews was renamed since Visual Basic does not allow fields to have the same name as other class members:
 			Private detailViews_Renamed As Hashtable
 			Private horzScrollPos As Integer
-'INSTANT VB NOTE: The field cellSelection was renamed since Visual Basic does not allow fields to have the same name as other class members:
 			Private cellSelection_Renamed As Hashtable
 
 			Protected Sub New(ByVal gridState As GridControlState, ByVal descriptor As ViewDescriptor)
@@ -54,18 +50,18 @@ Namespace DevExpress.XtraGrid.Helpers
 			End Sub
 
 			Public Shared Function Create(ByVal gridState As GridControlState, ByVal view As GridView) As ViewState
-				If Not gridState.viewDescriptors.ContainsKey(view.LevelName) Then
+				If (Not gridState.viewDescriptors.ContainsKey(view.LevelName)) Then
 					Return Nothing
 				End If
-				Dim state As New ViewState(gridState, DirectCast(gridState.viewDescriptors(view.LevelName), ViewDescriptor))
+				Dim state As New ViewState(gridState, CType(gridState.viewDescriptors(view.LevelName), ViewDescriptor))
 				Return state
 			End Function
 
 			Private Shared Function Create(ByVal parent As ViewState, ByVal view As GridView) As ViewState
-				If Not parent.gridState.viewDescriptors.ContainsKey(view.LevelName) Then
+				If (Not parent.gridState.viewDescriptors.ContainsKey(view.LevelName)) Then
 					Return Nothing
 				End If
-				Dim state As New ViewState(parent, DirectCast(parent.gridState.viewDescriptors(view.LevelName), ViewDescriptor))
+				Dim state As New ViewState(parent, CType(parent.gridState.viewDescriptors(view.LevelName), ViewDescriptor))
 				Return state
 			End Function
 
@@ -198,7 +194,7 @@ Namespace DevExpress.XtraGrid.Helpers
 				End If
 				SaveExpList.Clear()
 				For i As Integer = -1 To Integer.MinValue + 1 Step -1
-					If Not view.IsValidRowHandle(i) Then
+					If (Not view.IsValidRowHandle(i)) Then
 						Exit For
 					End If
 					If view.GetRowExpanded(i) Then
@@ -241,21 +237,21 @@ Namespace DevExpress.XtraGrid.Helpers
 				view.TopRowIndex = view.GetVisibleIndex(view.FocusedRowHandle) - visibleRowIndex
 			End Sub
 
-			Public Sub LoadSelectionViewInfo(ByVal view As GridView)
-				view.DataController.EnsureFindRowByValueCache(view.DataController.Columns(descriptor.keyFieldName), view.RowCount)
-				view.BeginSelection()
-				Try
-					view.ClearSelection()
-					For i As Integer = 0 To SaveSelList.Count - 1
-						SelectRowByRowInfo(view, DirectCast(SaveSelList(i), RowInfo), i = SaveSelList.Count - 1)
-					Next i
-				Finally
-					view.EndSelection()
-					view.DataController.DestroyFindRowByValueCache()
-				End Try
-			End Sub
+            Public Sub LoadSelectionViewInfo(ByVal view As GridView)
+                view.DataController.EnsureFindRowByValueCache(view.DataController.Columns(descriptor.keyFieldName), view.RowCount)
+                view.BeginSelection()
+                Try
+                    view.ClearSelection()
+                    For i As Integer = 0 To SaveSelList.Count - 1
+                        SelectRowByRowInfo(view, CType(SaveSelList(i), RowInfo), i = SaveSelList.Count - 1)
+                    Next i
+                Finally
+                    view.EndSelection()
+                    view.DataController.DestroyFindRowByValueCache()
+                End Try
+            End Sub
 
-			Public Sub LoadExpansionViewInfo(ByVal view As GridView)
+            Public Sub LoadExpansionViewInfo(ByVal view As GridView)
 				If view.GroupedColumns.Count = 0 Then
 					Return
 				End If
@@ -276,7 +272,7 @@ Namespace DevExpress.XtraGrid.Helpers
 					view.CollapseAllDetails()
 					For i As Integer = 0 To SaveMasterRowsList.Count - 1
 						Dim rowHandle As Integer = LocateRowByKeyValue(view, SaveMasterRowsList(i))
-						Dim state As ViewState = DirectCast(DetailViews(SaveMasterRowsList(i)), ViewState)
+						Dim state As ViewState = CType(DetailViews(SaveMasterRowsList(i)), ViewState)
 						If state Is Nothing Then
 							view.SetMasterRowExpanded(rowHandle, True)
 						Else
@@ -344,7 +340,7 @@ Namespace DevExpress.XtraGrid.Helpers
 		End Sub
 
 		Public Sub LoadViewInfo(ByVal view As GridView)
-			If root Is Nothing OrElse Not root.IsLevel(view.LevelName) Then
+			If root Is Nothing OrElse (Not root.IsLevel(view.LevelName)) Then
 				Return
 			End If
 			root.LoadState(view)
