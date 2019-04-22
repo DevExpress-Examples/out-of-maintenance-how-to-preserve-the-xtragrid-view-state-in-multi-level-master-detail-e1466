@@ -1,5 +1,4 @@
-Imports Microsoft.VisualBasic
-Imports System
+﻿Imports System
 Imports System.Drawing
 Imports System.Collections
 Imports System.ComponentModel
@@ -15,6 +14,7 @@ Namespace RefreshHelperApp
 	''' </summary>
 	Public Class Form1
 		Inherits System.Windows.Forms.Form
+
 		Private gridControl1 As DevExpress.XtraGrid.GridControl
 		Private gridView1 As DevExpress.XtraGrid.Views.Grid.GridView
 		Private WithEvents simpleButton1 As DevExpress.XtraEditors.SimpleButton
@@ -40,7 +40,7 @@ Namespace RefreshHelperApp
 		''' <summary>
 		''' Clean up any resources being used.
 		''' </summary>
-		Protected Overrides Overloads Sub Dispose(ByVal disposing As Boolean)
+		Protected Overrides Sub Dispose(ByVal disposing As Boolean)
 			If disposing Then
 				If components IsNot Nothing Then
 					components.Dispose()
@@ -61,10 +61,10 @@ Namespace RefreshHelperApp
 			Me.simpleButton2 = New DevExpress.XtraEditors.SimpleButton()
 			Me.panel1 = New System.Windows.Forms.Panel()
 			Me.checkEdit1 = New DevExpress.XtraEditors.CheckEdit()
-			CType(Me.gridControl1, System.ComponentModel.ISupportInitialize).BeginInit()
-			CType(Me.gridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+			DirectCast(Me.gridControl1, System.ComponentModel.ISupportInitialize).BeginInit()
+			DirectCast(Me.gridView1, System.ComponentModel.ISupportInitialize).BeginInit()
 			Me.panel1.SuspendLayout()
-			CType(Me.checkEdit1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
+			DirectCast(Me.checkEdit1.Properties, System.ComponentModel.ISupportInitialize).BeginInit()
 			Me.SuspendLayout()
 			' 
 			' gridControl1
@@ -91,7 +91,8 @@ Namespace RefreshHelperApp
 			Me.simpleButton1.Size = New System.Drawing.Size(75, 23)
 			Me.simpleButton1.TabIndex = 1
 			Me.simpleButton1.Text = "Save"
-'			Me.simpleButton1.Click += New System.EventHandler(Me.simpleButton1_Click);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.simpleButton1.Click += new System.EventHandler(this.simpleButton1_Click);
 			' 
 			' simpleButton2
 			' 
@@ -100,7 +101,8 @@ Namespace RefreshHelperApp
 			Me.simpleButton2.Size = New System.Drawing.Size(72, 24)
 			Me.simpleButton2.TabIndex = 2
 			Me.simpleButton2.Text = "Load"
-'			Me.simpleButton2.Click += New System.EventHandler(Me.simpleButton2_Click);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.simpleButton2.Click += new System.EventHandler(this.simpleButton2_Click);
 			' 
 			' panel1
 			' 
@@ -120,7 +122,8 @@ Namespace RefreshHelperApp
 			Me.checkEdit1.Properties.Caption = "Cell selection"
 			Me.checkEdit1.Size = New System.Drawing.Size(123, 19)
 			Me.checkEdit1.TabIndex = 3
-'			Me.checkEdit1.CheckedChanged += New System.EventHandler(Me.checkEdit1_CheckedChanged);
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.checkEdit1.CheckedChanged += new System.EventHandler(this.checkEdit1_CheckedChanged);
 			' 
 			' Form1
 			' 
@@ -130,11 +133,12 @@ Namespace RefreshHelperApp
 			Me.Controls.Add(Me.panel1)
 			Me.Name = "Form1"
 			Me.Text = "Form1"
-'			Me.Load += New System.EventHandler(Me.Form1_Load);
-			CType(Me.gridControl1, System.ComponentModel.ISupportInitialize).EndInit()
-			CType(Me.gridView1, System.ComponentModel.ISupportInitialize).EndInit()
+'INSTANT VB NOTE: The following InitializeComponent event wireup was converted to a 'Handles' clause:
+'ORIGINAL LINE: this.Load += new System.EventHandler(this.Form1_Load);
+			DirectCast(Me.gridControl1, System.ComponentModel.ISupportInitialize).EndInit()
+			DirectCast(Me.gridView1, System.ComponentModel.ISupportInitialize).EndInit()
 			Me.panel1.ResumeLayout(False)
-			CType(Me.checkEdit1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
+			DirectCast(Me.checkEdit1.Properties, System.ComponentModel.ISupportInitialize).EndInit()
 			Me.ResumeLayout(False)
 
 		End Sub
@@ -143,7 +147,7 @@ Namespace RefreshHelperApp
 		''' <summary>
 		''' The main entry point for the application.
 		''' </summary>
-		<STAThread> _
+		<STAThread>
 		Shared Sub Main()
 			Application.Run(New Form1())
 		End Sub
@@ -151,13 +155,17 @@ Namespace RefreshHelperApp
 		Private helper As GridControlState
 
 		Private ds As DataSet
-		Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+		Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 			ds = New DataSet()
 			ds.ReadXml("nwind.xml")
 			gridView1.OptionsView.ColumnAutoWidth = False
 			gridControl1.DataSource = ds.Tables("Categories")
 
-			helper = New GridControlState(New GridControlState.ViewDescriptor(){ New GridControlState.ViewDescriptor("", "CategoryID"), New GridControlState.ViewDescriptor("CategoriesProducts", "ProductID"), New GridControlState.ViewDescriptor("ProductsOrderDetails", "OrderID")})
+			helper = New GridControlState(New GridControlState.ViewDescriptor(){
+				New GridControlState.ViewDescriptor("", "CategoryID"),
+				New GridControlState.ViewDescriptor("CategoriesProducts", "ProductID"),
+				New GridControlState.ViewDescriptor("ProductsOrderDetails", "OrderID")
+			})
 		End Sub
 
 		Private Sub simpleButton1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles simpleButton1.Click
@@ -169,11 +177,7 @@ Namespace RefreshHelperApp
 		End Sub
 
 		Private Sub checkEdit1_CheckedChanged(ByVal sender As Object, ByVal e As EventArgs) Handles checkEdit1.CheckedChanged
-			If (CType(sender, DevExpress.XtraEditors.CheckEdit)).Checked Then
-				gridView1.OptionsSelection.MultiSelectMode = GridMultiSelectMode.CellSelect
-			Else
-				gridView1.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect
-			End If
+			gridView1.OptionsSelection.MultiSelectMode = If(DirectCast(sender, DevExpress.XtraEditors.CheckEdit).Checked, GridMultiSelectMode.CellSelect, GridMultiSelectMode.RowSelect)
 		End Sub
 	End Class
 End Namespace
